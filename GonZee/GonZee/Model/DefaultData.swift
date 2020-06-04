@@ -9,16 +9,15 @@
 import Foundation
 
 
-struct DefaultData{
+class DefaultData{
     
-    var latitude:Double
-    var longitude:Double
-    
-    init(latitude: Double, longitude: Double) {
-        self.latitude = latitude
-        self.longitude = longitude
-    }
+    var latitude:Double?
+    var longitude:Double?
 
+    var tmX: Double?
+    var tmY: Double?
+ 
     
 }
+
 

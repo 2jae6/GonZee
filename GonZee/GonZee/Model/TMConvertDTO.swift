@@ -22,8 +22,8 @@ class TMConvertDTO: Mappable {
     }
     
     class Documents: Mappable {
-        var x: Any?
-        var y: Any?
+        var x: Double?
+        var y: Double?
         required init?(map: Map) {
             
         }
