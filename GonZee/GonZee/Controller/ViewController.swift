@@ -16,20 +16,31 @@ import ObjectMapper
 class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDelegate {
     //LocationManager 선언
     var locationManager:CLLocationManager!
-    var defData = DefaultData()
     //DefalutData 선언
-    // var defData = DefaultData()
+    var defData = DefaultData()
+    
+    
+    //xml 필요 변수들 시작
+    var currentElement = ""
+    
+    class CheckStation{
+        var checkS:String?
+    }
+    var checkArray: Array<String> = []
+    var checkStation:CheckStation?
+    //xml 필요변수들 끝
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        
         //위도 경도 획득 및 TM 변환
         locationMan()
         
         
-        
     }//viewdidload 끝
-    
     //위도 경도 획득 메서드
     func locationMan(){
         
@@ -109,104 +120,111 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
             
         } //locationman() 함수 끝
         
-  
+        
     }
     //가까운 측정소 찾기
-      func nearChecker(){
-          //가까운 측정소 출력
-          let url = "http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList"
-          
-          let api_key = "vejJ9z%2BevfaWK4HHI9EWdssLIRe%2FI31VBETVkH%2B1HWfVOXGdelhAHZ1a1vgdBpYMB8UzNN6USCr75LB9ynmI%2FQ%3D%3D"
-          
-          let api_key_decode = api_key.decodeUrl()
-          
+    func nearChecker(){
+        //가까운 측정소 출력
+        let url = "http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList"
+        
+        let api_key = "vejJ9z%2BevfaWK4HHI9EWdssLIRe%2FI31VBETVkH%2B1HWfVOXGdelhAHZ1a1vgdBpYMB8UzNN6USCr75LB9ynmI%2FQ%3D%3D"
+        
+        let api_key_decode = api_key.decodeUrl()
+        
         guard let tmX = self.defData.tmX else{
-              print("으악")
-              return
-          }
-          
+            print("으악")
+            return
+        }
+        
         guard let tmY = self.defData.tmY else{
-              print("으악")
-              return
-          }
-          
-          let param:Parameters = [
-              "ServiceKey" : api_key_decode!,
-              "tmX" : tmX,
-              "tmY" : tmY
-              
-              
-          ]
-          
-          /*
-           // JSON 데이터 호출 로그
-           Alamofire.request(url, method: .get, parameters: param, encoding: URLEncoding.default).validate().responseString{
-           (response) in
-           switch response.result{
-           case .success(let suc):
-           print(suc)
-           print("성공")
-           case .failure(let err):
-           print(err)
-           print("실패")
-           }
-           }
-           */
-          
-          //XMLParser
-          let keyX = api_key_decode!
-          
-          let urlX = "http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=\(keyX)&tmX=\(tmX)&tmY=\(tmY)"
-          
-          
-          let xmlParser = XMLParser(contentsOf: URL(string: urlX)!)
-          xmlParser!.delegate = self
-          xmlParser!.parse()
-         
-          
-          
-          //XML Parser Delegate
-          // XML 파서가 시작 테그를 만나면 호출됨
-          var currentElement = ""
-          var checkStation:CheckStation
-          
-          func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-              print("1번")
-              
-              currentElement = elementName
-              
-              if elementName == "staionName"{
-                  var checkStation = CheckStation()
-                  
-              }
-          }
-          
-          // 현재 테그에 담겨있는 문자열 전달
-          func parser(_ parser: XMLParser, foundCharacters string: String) {
-              print("2번")
-              
-              switch currentElement {
-                  
-              case "stationName":
-                  checkStation.checkStation = string
-              default:
-                  break;
-              }
-          }
-          
-          // XML 파서가 종료 테그를 만나면 호출됨
-          func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-              print("3번")
-              
-              if elementName == "stationName"{
-                  
-              }
-          }
-      }//nearchecker 끝
-
+            print("으악")
+            return
+        }
+        
+        let param:Parameters = [
+            "ServiceKey" : api_key_decode!,
+            "tmX" : tmX,
+            "tmY" : tmY
+            
+            
+        ]
+        
+        /*
+         // JSON 데이터 호출 로그
+         Alamofire.request(url, method: .get, parameters: param, encoding: URLEncoding.default).validate().responseString{
+         (response) in
+         switch response.result{
+         case .success(let suc):
+         print(suc)
+         print("성공")
+         case .failure(let err):
+         print(err)
+         print("실패")
+         }
+         }
+         */
+        
+        //XMLParser
+        let keyX = api_key
+        
+        let urlX = "http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=\(keyX)&tmX=\(tmX)&tmY=\(tmY)"
+        
+        
+        let xmlParser = XMLParser(contentsOf: URL(string: urlX)!)
+        xmlParser!.delegate = self
+        xmlParser!.parse()
+        
+        
+        
+        //XML Parser Delegate
+        
+        
+        print(checkArray)
+        
+        
+    }//nearchecker()끝
+    
+    //method
+    // XML 파서가 시작 테그를 만나면 호출됨
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        
+        
+        currentElement = elementName
+        
+        
+        if elementName == "stationName"{
+            checkStation = CheckStation()
+            
+            
+        }
+    }
+    
+    // 현재 테그에 담겨있는 문자열 전달
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        
+        
+        switch currentElement {
+        case "stationName":
+            checkStation?.checkS = string
+            
+        default:
+            break;
+        }
+    }
+    
+    // XML 파서가 종료 테그를 만나면 호출됨
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        
+        if elementName == "stationName"{
+            checkArray.append(checkStation!.checkS!)
+        }
+    }
+    
     
 } //뷰 컨트롤러 끝
 
+
+//api - key decode
 extension String {
     func decodeUrl() -> String?{
         return self.removingPercentEncoding
