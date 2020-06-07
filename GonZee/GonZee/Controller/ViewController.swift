@@ -48,7 +48,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
     var weather:Weather?
     //xml 필요변수들 끝
     
-
+    
     
     
     
@@ -57,42 +57,57 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
     @IBOutlet var pm10State: UILabel!
     @IBOutlet var pm25State: UILabel!
     @IBOutlet var nowLocation: UILabel!
-    
-    
+    @IBOutlet var nowT1H: UILabel!
+    @IBOutlet var catImage: UIImageView!
     //IBAction
     
     
     @IBAction func refreshButton(_ sender: Any) {
-        getWeather()
+        refresh()
+        
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.view.addSubview(self.activityIndicator)
         
-        refresh()
         
-        
+ 
+        callback()
+  
     }//viewdidload 끝
+
+    func callback(){
+        //포그라운드 상태에서 위치 추적 권한 요청
+         locationManager = CLLocationManager()
+         locationManager.delegate = self
+         //포그라운드 상태에서 위치 추적 권한 요청
+         locationManager.requestWhenInUseAuthorization()
+    }
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .authorizedWhenInUse:
+            print("자동")
+            locationMan()
+        default:
+            print("뀨")
+        }
+    }
     
     func refresh(){
         // locationman > nearChecker > getSmog> getWeather > getWeather2 > bgSet
         locationMan()
+        
     }
-    
+ 
     
     //위도 경도 획득 메서드
     func locationMan(){
         
+        activityIndicator.startAnimating()
         
-        //locationMager 인스턴스 생성 및 델리게이트 생성
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        
-        //포그라운드 상태에서 위치 추적 권한 요청
-        locationManager.requestWhenInUseAuthorization()
-        
+
         //배터리에 맞게 권장되는 최적의 정확도
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
@@ -101,7 +116,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         
         //위도 경도 가져오기
         guard let coor = locationManager.location?.coordinate else{
-            print("coor 으악")
+            print("으억")
+            callback()
             return
         }
         let latitude = coor.latitude
@@ -119,7 +135,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
             if let address: [CLPlacemark] = place {
                 print("시(도): \(String(describing: address.last?.administrativeArea))")
                 print("구(군): \(String(describing: address.last?.locality))")
-                self.nowLocation.text = "\(String(describing: address.last!.locality!))는 지금"
+                self.nowLocation.text = "지금 \(String(describing: address.last!.locality!))는"
             }
         }
         
@@ -158,7 +174,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
             
             
             self.nearChecker()
-           
+            
         } //locationman() 함수 끝
         
         
@@ -258,6 +274,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         
         
         //xmlPasse!!!!!
+        if checkArray.isEmpty{
+            refresh()
+        }
+        
         let stationName = checkArray[0].addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
         
         let urlS = "http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?serviceKey=\(api_key)&stationName=\(stationName!)&numOfRows=1&pageNo=1&dataTerm=DAILY&ver=1.3"
@@ -278,9 +298,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         //초단기 실황
         let url = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst"
         //getVilageFcst
-      //  let api_key = "7jXpwje4kiKt%2F8%2Bhwo5bDGtMqmvhHr%2FNEZWXtFV5fzlFw3v2aYod7%2B9aDe6Ow2D7e68UbljTbwMEwO4DXZNPyw%3D%3D"
-            let api_key = "vejJ9z%2BevfaWK4HHI9EWdssLIRe%2FI31VBETVkH%2B1HWfVOXGdelhAHZ1a1vgdBpYMB8UzNN6USCr75LB9ynmI%2FQ%3D%3D"
-
+        //  let api_key = "7jXpwje4kiKt%2F8%2Bhwo5bDGtMqmvhHr%2FNEZWXtFV5fzlFw3v2aYod7%2B9aDe6Ow2D7e68UbljTbwMEwO4DXZNPyw%3D%3D"
+        let api_key = "vejJ9z%2BevfaWK4HHI9EWdssLIRe%2FI31VBETVkH%2B1HWfVOXGdelhAHZ1a1vgdBpYMB8UzNN6USCr75LB9ynmI%2FQ%3D%3D"
+        
         let api_key_decode = api_key.decodeUrl()
         
         let convert = LambertProjection()
@@ -303,9 +323,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         
         let base_date = year + month + day
         let base_time = hour + "00"
-        
-        
-       
+        /*
+         
+         
          let param:Parameters = [
          "serviceKey" : api_key_decode!,
          "numOfRows" : 100,
@@ -329,7 +349,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
          print("실패")
          }
          }
-        
+         */
         
         let urlW = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst?serviceKey=\(api_key)&numOfRows=100&pageNo=1&base_date=\(base_date)&base_time=\(base_time)&nx=\(x)&ny=\(y)"
         
@@ -344,35 +364,50 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         bgSet()
     }//날씨 정보 얻기 끝
     
-
+    
     func bgSet(){
         
         pm10State.text = smogArray[0]
         pm25State.text = smogArray[1]
         
-        let smogNum = Int(smogArray[0])
-        //배경 설정
+        nowT1H.text = "서버가 혼잡하여 수신하지 못하였습니다."
+        if !weatherArray.isEmpty{
+            nowT1H.text = weatherArray[0] + "°C"
+        }
         
-        if smogNum! <= 30{
-            //좋음
-            self.view.backgroundColor = UIColor(red: 0, green: 0.8392, blue: 0.9686, alpha: 1.0)
-            airState.text = "아주 좋은 공기!!!"
-        }else if smogNum! <= 80{
-            //보통
-            self.view.backgroundColor = UIColor(red: 0.4196, green: 0.898, blue: 0, alpha: 1.0)
-            airState.text = "나름 괜찮은 공기!"
-        }else if smogNum! <= 150{
-            //나쁨
-            self.view.backgroundColor = UIColor(red: 0.949, green: 0.9176, blue: 0, alpha: 1.0)
-            airState.text = "조심..! 나쁜 공기!"
-        }else{
-            //매우 나쁨
-            self.view.backgroundColor = UIColor(red: 0.898, green: 0.5843, blue: 0, alpha: 1.0)
-            airState.text = "그냥 집에 있자..!"
+     
+        var smogNum = Int(smogArray[0])
+        
+        if smogArray[1] > smogArray[0]{
+            let smogNum = Int(smogArray[1])
         }
         
         
+        //배경 설정
+        if smogNum! <= 30{
+            //좋음
+            self.view.backgroundColor = UIColor(red: 0, green: 0.8392, blue: 0.9686, alpha: 1.0)
+            self.catImage.image = UIImage(named: "1.png")
+            airState.text = "아주 좋은 공기다냥!!!"
+        }else if smogNum! <= 80{
+            //보통
+            self.view.backgroundColor = UIColor(red: 0.4196, green: 0.898, blue: 0, alpha: 1.0)
+            self.catImage.image = UIImage(named: "2.png")
+            airState.text = "나름 괜찮은 공기다냥!"
+        }else if smogNum! <= 150{
+            //나쁨
+            self.view.backgroundColor = UIColor(red: 1, green: 0.6471, blue: 0, alpha: 1.0)
+            self.catImage.image = UIImage(named: "3.png")
+            airState.text = "조심..! 나쁜 공기다냥!"
+        }else{
+            //매우 나쁨
+            self.view.backgroundColor = UIColor(red: 0.8196, green: 0.1059, blue: 0, alpha: 1.0)
+            self.catImage.image = UIImage(named: "4.png")
+            airState.text = "그냥 집에 있자냥..."
+        }
         
+        
+        activityIndicator.stopAnimating()
     }//배경설정 끝
     
     
@@ -403,7 +438,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
             weather = Weather()
         }
         
-
+        
         
         
     }
@@ -430,8 +465,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         if currentElement == "obsrValue" && th1bool == true{
             weather?.data = string
         }
-
-       
+        
+        
         
         
     }
@@ -457,7 +492,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         }
         
     }
-    
+    //로딩 인디케이터
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        // Create an indicator.
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        activityIndicator.center = self.view.center
+        activityIndicator.color = UIColor.red
+        // Also show the indicator even when the animation is stopped.
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = UIActivityIndicatorView.Style.white
+        // Start animation.
+        activityIndicator.stopAnimating()
+        return activityIndicator }()
     
 } //뷰 컨트롤러 끝
 
