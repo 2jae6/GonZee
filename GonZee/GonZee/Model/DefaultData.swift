@@ -17,7 +17,7 @@ class DefaultData{
     var tmX: Double?
     var tmY: Double?
  
-    
+    var temp:Double?
 }
 
 

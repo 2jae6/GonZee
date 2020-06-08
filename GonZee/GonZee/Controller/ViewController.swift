@@ -76,6 +76,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
  
         callback()
   
+        
     }//viewdidload 끝
 
     func callback(){
@@ -189,12 +190,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         let api_key_decode = api_key.decodeUrl()
         
         guard let tmX = self.defData.tmX else{
-            print("으악")
+            print("으악1")
             return
         }
         
         guard let tmY = self.defData.tmY else{
-            print("으악")
+            print("으악2")
             return
         }
         /*
@@ -289,10 +290,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         //pm10Value, pm25Value
         print(smogArray)
         
-        getWeather()
-        
+     //   getWeather()
+        getWeather2()
     }//getSmog()끝
-    
+    /*
     //날씨 정보 얻기
     func getWeather(){
         //초단기 실황
@@ -363,17 +364,52 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         
         bgSet()
     }//날씨 정보 얻기 끝
-    
-    
+    */
+    func getWeather2(){
+        
+        let url = "http://api.openweathermap.org/data/2.5/weather"
+        //let url = "http://api.openweathermap.org/data/2.5/weather?lat=37&lon=127&appid=1f8af8214a1d9b5b7a074aa65a61aaee"
+        
+        let appid = "1f8af8214a1d9b5b7a074aa65a61aaee"
+        print(defData.latitude)
+        let param: Parameters = [
+            "lat" : defData.latitude,
+            "lon" : defData.longitude,
+            "appid" : appid
+        ]
+        /*
+        Alamofire.request(url, method: .get, parameters: param, encoding: URLEncoding.default).responseJSON{
+        (response) in
+        switch response.result{
+        case .success(let suc):
+        print(suc)
+        print("성공")
+        case .failure(let err):
+        print(err)
+        print("실패")
+        }
+        }
+        */
+        
+        Alamofire.request(url, method: .get, parameters: param, encoding: URLEncoding.default).responseObject{
+             (response: DataResponse<TMPData>) in
+             let tmpData = response.result.value
+       
+            self.defData.temp = tmpData!.main!.temp!
+            print(self.defData.temp!)
+            self.nowT1H.text = "\(self.defData.temp! - 273.15)" + "°C"
+            
+    }
+        
+        bgSet()
+        
+}
     func bgSet(){
         
         pm10State.text = smogArray[0]
         pm25State.text = smogArray[1]
         
-        nowT1H.text = "서버가 혼잡하여 수신하지 못하였습니다."
-        if !weatherArray.isEmpty{
-            nowT1H.text = weatherArray[0] + "°C"
-        }
+     
         
      
         var smogNum = Int(smogArray[0])
