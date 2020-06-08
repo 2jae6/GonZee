@@ -397,7 +397,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
        
             self.defData.temp = tmpData!.main!.temp!
             print(self.defData.temp!)
-            self.nowT1H.text = "\(self.defData.temp! - 273.15)" + "°C"
+            self.nowT1H.text = "\(Int(self.defData.temp! - 273.15))" + "°C"
             
     }
         
