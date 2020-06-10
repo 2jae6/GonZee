@@ -413,6 +413,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, XMLParserDele
         
      
         var smogNum = Int(smogArray[0])
+     
         
         if smogArray[1] > smogArray[0]{
             let smogNum = Int(smogArray[1])

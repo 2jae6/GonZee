@@ -28,7 +28,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>앱을 열 때마다 위치정보 가져오기 허용</string>
+	<string>사용자 위치에서 가까운 날씨 측정소를 찾기위해 동의가 필요합니다.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
