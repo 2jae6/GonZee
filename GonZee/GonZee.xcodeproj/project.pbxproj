@@ -22,7 +22,7 @@
 
 /* Begin PBXFileReference section */
 		001F44C82486311200ECF424 /* TMConvertDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMConvertDTO.swift; sourceTree = "<group>"; };
-		004A7DEB24839323003C7667 /* GonZee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GonZee.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		004A7DEB24839323003C7667 /* 조형아 지금 어때?.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "조형아 지금 어때?.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		004A7DEE24839323003C7667 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		004A7DF024839323003C7667 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		004A7DF224839323003C7667 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,7 +63,7 @@
 		004A7DEC24839323003C7667 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				004A7DEB24839323003C7667 /* GonZee.app */,
+				004A7DEB24839323003C7667 /* 조형아 지금 어때?.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,7 +154,7 @@
 			);
 			name = GonZee;
 			productName = GonZee;
-			productReference = 004A7DEB24839323003C7667 /* GonZee.app */;
+			productReference = 004A7DEB24839323003C7667 /* 조형아 지금 어때?.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -408,9 +408,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.owl.memo.GonZee;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "조형아 지금 어때?";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -428,9 +428,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.owl.memo.GonZee;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "조형아 지금 어때?";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
