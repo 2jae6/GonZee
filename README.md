@@ -2,7 +2,7 @@
  ### 이름
  * 조형아 지금어때?
  
- ![Github logo](/얼굴샷.png) 
+ ![Github logo](/logo.png) 
 
 
 # Project Information
