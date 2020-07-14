@@ -10,7 +10,7 @@
  * 백석대학교 조형관에사는 고양이 조형이가 실시간 미세먼지 수치와 기온을 알려줍니다.
 
 ### 설치 
- * Project를 다운받으시면 됩니다.
+ * Project를 클론 후 Cocoapod에서 Alamofire를 설치해줍니다.
 
 ### 사용 방법
  * Xcode 에서 빌드하신 후 바로 사용하시면 됩니다.
@@ -20,7 +20,7 @@
   * Swift
   * Alamofire
   * json, xml Parsing
-  
+  * Object Mapper
   
 
 ### 앱스토어 링크
